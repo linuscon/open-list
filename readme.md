@@ -3,14 +3,24 @@ Open-list is a very simple to set up list server with realtime syncronisation an
 
 
 # installation
+Im going to run the server as user `linux`, feel free to use another user :)
+
 ## download
 
+`apt install npm`
+
 `cd /var/www/`
+
 `git clone git@github.com:linuscon/open-list.git`
+
+`mkdir /var/open-list`
+
+`chown -R linux:linux /var/open-list/`
 
 ## apache
 
 place the following into your apache wirthost:
+
 ```xml
 <VirtualHost *:80>
         # The ServerName directive sets the request scheme, hostname and port that
@@ -79,4 +89,4 @@ ExecStart=npm run api
 WantedBy = multi-user.target
 ```
 
-then run `systemctl daemon-reload` and `systemctl enable open-list`
+then run `systemctl daemon-reload` and `systemctl enable open-list` and `systemctl start open-list`
