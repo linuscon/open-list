@@ -1,7 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const DbStumb = require('./lib/DbStumb.js');
+const cors = require('cors')
 const app = express();
+
+app.use(cors());
 
 // set api root
 const apiRoot = '/api/v1';
@@ -20,12 +23,16 @@ app.get(`${apiRoot}/hello`, (req, res) => {
 	res.json({ message: 'Hello, People!' });
 });
 
-app.get([`${apiRoot}/records*`], (req, res) => {
-	let subParams = req.params[0].split('/');
-	console.log(subParams);
+app.get([`${apiRoot}/records*`, `${apiRoot}/record`], (req, res) => {
+	res.set('Access-Control-Allow-Origin', '*');
+	let subParams = [undefined, undefined];
+	if (req.params[0])
+		subParams = req.params[0].split('/');
+
 	switch(subParams[1]){
 		case undefined:
-			res.status(200).json(db.getRecords());
+			var dbRes = db.getRecords();
+			res.status(200).json(dbRes.filter(d => !d.deleted));
 			return;
 			break;
 		case "by-id":
@@ -33,11 +40,16 @@ app.get([`${apiRoot}/records*`], (req, res) => {
 			var dbRes = db.getRecords();
 			res.status(200).json(dbRes.filter(d => d.id == reqID));
 			break;
+		case "after-ts":
+			var reqTS = subParams[2];
+			var dbRes = db.getRecords();
+			res.status(200).json(dbRes.filter(d => d.ts >= reqTS && !d.deleted));
+			break;
 		case "checked":
 			var reqState = subParams[2];
 			var dbRes = db.getRecords();
 			console.log(dbRes);
-			res.status(200).json(dbRes.filter(d => d.checked != (reqState == 'false')));
+			res.status(200).json(dbRes.filter(d => d.checked != (reqState == 'false') && !d.deleted));
 			return;
 			break;
 		default:
@@ -46,13 +58,37 @@ app.get([`${apiRoot}/records*`], (req, res) => {
 	}
 });
 
-app.post(`${apiRoot}/record`, (req, res) => {
-	let response = db.setRecord(req.body);
+app.put(`${apiRoot}/record`, (req, res) => {
+	let username = "";
+	if (req.headers.authorization)
+		username = Buffer.from(req.headers.authorization.split(" ")[1], 'base64').toString().split(':')[0];
+	let response = db.addRecord(req.body, username);
 	if (response != null){
+		res.set('Access-Control-Allow-Origin', '*');
 		res.status(201).json(response);
 		console.log("OK");
 	} else {
+		res.set('Access-Control-Allow-Origin', '*');
 		res.status(400).json();
 		console.log("CLIENT_ERROR");
 	}
+	return
+});
+
+
+app.post(`${apiRoot}/record`, (req, res) => {
+	let username = "";
+	if (req.headers.authorization)
+		username = Buffer.from(req.headers.authorization.split(" ")[1], 'base64').toString().split(':')[0];
+	let response = db.changeRecord(req.body, username);
+	if (response != null){
+		res.set('Access-Control-Allow-Origin', '*');
+		res.status(201).json(response);
+		console.log("OK");
+	} else {
+		res.set('Access-Control-Allow-Origin', '*');
+		res.status(400).json();
+		console.log("CLIENT_ERROR");
+	}
+	return
 });
