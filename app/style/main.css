@@ -39,8 +39,18 @@ input[type=checkbox] {
 	border: 5px solid #ddd;
 	height: 2.1em;
 	align-items: center;
+	overflow: clip;
 }
 
+.miniInfo {
+	float: right;
+	padding-right: 5pt;
+	vertical-align: bottom;
+	font-size: 8pt;
+	color: #36c27a;
+	font-style: italic;
+	white-space: pre-line;
+}
 
 .list-row:nth-child(even) {background-color: #f2f2f2;}
 

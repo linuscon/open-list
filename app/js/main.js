@@ -37,7 +37,7 @@ function checkOnline(){
 	if (navigator.onLine) {
 		return true;
 	} else {
-		showError("du bist offline :( <br> Aenderungen werden nicht gespeichert");
+		showError("du bist offline :( <br> Änderungen werden nicht gespeichert");
 		return false;
 	}
 }
@@ -88,10 +88,10 @@ async function editEntry(id, action, text, state){
 
 	}
 	if (!response.ok){
-		showError("Eintraege konnten nicht aktualisiert werden! Der Server ist nicht erreichbar");
+		showError("Einträge konnten nicht aktualisiert werden! Der Server ist nicht erreichbar");
 	}
 	} catch(error) {
-		showError("Eintraege konnten nicht aktualisiert werden! Der Server ist nicht erreichbar");
+		showError("Einträge konnten nicht aktualisiert werden! Der Server ist nicht erreichbar");
 	}
 	setLoading(false);
 	reloadList(true);
@@ -138,6 +138,11 @@ function addCb(record) {
 	if (checked)
 		label.setAttribute("class","strike");
 
+	let miniInfo = document.createElement('lable');
+	miniInfo.htmlFor = "listCb-"+id;
+	miniInfo.setAttribute("class","miniInfo");
+	miniInfo.appendChild(document.createTextNode(`von: ${record.owners.added}\nzul. geändert: ${record.owners.lastChanged}`));
+
 	let rmBtn = document.createElement('button');
 	rmBtn.htmlFor = "listCb-"+id;
 	rmBtn.appendChild(document.createTextNode('\u{1F5D1}'));
@@ -146,6 +151,7 @@ function addCb(record) {
 	rowDiv.appendChild(checkbox);
 	rowDiv.appendChild(label);
 	rowDiv.appendChild(rmBtn);
+	rowDiv.appendChild(miniInfo);
 	rowDiv.appendChild(document.createElement('br'));
 	listDiv.appendChild(rowDiv);
 }
