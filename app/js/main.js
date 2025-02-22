@@ -119,7 +119,10 @@ function cbChange(htmlId, id){
 	reloadList(true);
 }
 
-function addCb(text, checked, id) {
+function addCb(record) {
+	let text = record.entries.title;
+	let checked = record.checked;
+	let id = record.id;
 	let rowDiv = document.createElement('div');
 	rowDiv.setAttribute("class","list-row");
 	rowDiv.htmlFor = "listCb-"+id;
@@ -193,7 +196,7 @@ function reloadList(byFunct) {
 			records.sort(function(a,b){return a.checked-b.checked});
 			clearCbs();
 			for(let i = 0; i < records.length; i++){
-				addCb(records[i].entries.title, records[i].checked, records[i].id);
+				addCb(records[i]);
 			}
 			if (records.length == 0) {
 				document.getElementById("all-done-div").classList.remove("hidden");
