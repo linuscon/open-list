@@ -2,6 +2,9 @@
   "name": "open-list",
   "version": "1.0.0",
   "description": "",
+  "config": {
+    "dbFile": "/home/linux/open-list/lib/db.json"
+  },
   "main": "api",
   "scripts": {
     "test-api": "./node_modules/.bin/nodemon api.js",
@@ -14,6 +17,7 @@
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "express": "^4.21.2",
+    "fs": "^0.0.1-security",
     "jsonschema": "^1.5.0",
     "nodemon": "^3.1.9"
   }
