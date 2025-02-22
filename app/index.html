@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel='stylesheet' type='text/css' href='style/main.css'>
+	<link rel="icon" href="/favicon.ico">
+	<script type="text/javascript" src="/js/main.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name='robots' content='noindex,follow' />
+</head>
+<style>
+#loadingscreen {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        background: white;
+        z-index: 9;
+	scale: 5;
+}
+
+#loadingscreen img {
+    position: absolute;
+    max-width: 90%;
+    margin-left: -141px;
+    margin-top: -130px;
+    top: 50%;
+    left: 50%;
+    width: 283px;
+}
+
+#loadingscreen a.cancel {
+    position: absolute;
+    top: 50%;
+    margin-top: 140px;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    background-color: #333;
+    position: absolute;
+    top: 50%;
+    margin-top: -20px;
+    left: 50%;
+    margin-left: -20px;
+    
+    border-radius: 100%;  
+    -webkit-animation: sk-scaleout 1.0s infinite ease-in-out;
+    animation: sk-scaleout 1.0s infinite ease-in-out;
+}
+
+@-webkit-keyframes sk-scaleout {
+    0% { -webkit-transform: scale(0) }
+    100% {
+      -webkit-transform: scale(1.0);
+      opacity: 0;
+    }
+}
+
+@keyframes sk-scaleout {
+    0% { 
+      -webkit-transform: scale(0);
+      transform: scale(0);
+    } 100% {
+      -webkit-transform: scale(1.0);
+      transform: scale(1.0);
+      opacity: 0;
+    }
+}
+</style>
+<body>
+<div id="errorBox" class="alert hidden">
+  <span class="closebtn" onclick="this.parentElement.classList.add('hidden');">&times;</span> 
+  <strong>Error: </strong><div id="errorText"></div>
+</div>
+<h1>WG Einkaufsliste</h1>
+<div id="container">
+
+<div id="loadingscreen"><div class="spinner"></div></div>
+
+<div id="all-done-div" class="hidden" action="">
+	<svg width="100"800p height="100px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+	    <g>
+	        <path fill="none" d="M0 0h24v24H0z"/>
+	        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-.997-4L6.76 11.757l1.414-1.414 2.829 2.829 5.656-5.657 1.415 1.414L11.003 16z"/>
+	    </g>
+	</svg>
+	<p>Alles erledigt! :)</p>
+</div>
+<div id="list-div" action=""></div>
+
+<div class="input-and-button">
+	<input type="text" id="addTb" placeholder="neues Element">
+	<button id="addBtn" onclick="addEntry()" class="addBtn">+</button>
+</div>
+</div>
+</body>
+</html>
+

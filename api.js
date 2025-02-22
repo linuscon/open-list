@@ -19,12 +19,7 @@ app.listen(port, () => {
 	console.log(`Server is running on port ${port}`);
 });
 
-app.get(`${apiRoot}/hello`, (req, res) => {
-	res.json({ message: 'Hello, People!' });
-});
-
 app.get([`${apiRoot}/records*`, `${apiRoot}/record`], (req, res) => {
-	res.set('Access-Control-Allow-Origin', '*');
 	let subParams = [undefined, undefined];
 	if (req.params[0])
 		subParams = req.params[0].split('/');
@@ -64,15 +59,13 @@ app.put(`${apiRoot}/record`, (req, res) => {
 		username = Buffer.from(req.headers.authorization.split(" ")[1], 'base64').toString().split(':')[0];
 	let response = db.addRecord(req.body, username);
 	if (response != null){
-		res.set('Access-Control-Allow-Origin', '*');
+		console.log(`${username} made changes: ${JSON.stringify(response)}`)
 		res.status(201).json(response);
-		console.log("OK");
 	} else {
-		res.set('Access-Control-Allow-Origin', '*');
 		res.status(400).json();
 		console.log("CLIENT_ERROR");
 	}
-	return
+	return;
 });
 
 
@@ -82,13 +75,11 @@ app.post(`${apiRoot}/record`, (req, res) => {
 		username = Buffer.from(req.headers.authorization.split(" ")[1], 'base64').toString().split(':')[0];
 	let response = db.changeRecord(req.body, username);
 	if (response != null){
-		res.set('Access-Control-Allow-Origin', '*');
+		console.log(`${username} made changes: ${JSON.stringify(response)}`)
 		res.status(201).json(response);
-		console.log("OK");
 	} else {
-		res.set('Access-Control-Allow-Origin', '*');
 		res.status(400).json();
 		console.log("CLIENT_ERROR");
 	}
-	return
+	return;
 });
