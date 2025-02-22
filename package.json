@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "config": {
-    "dbFile": "/home/linux/open-list/lib/db.json"
+    "dbFile": "/var/open-list/db.json"
   },
   "main": "api",
   "scripts": {
