@@ -16,6 +16,22 @@ window.addEventListener('DOMContentLoaded', () => {
 	})
 });
 
+updateLookAndFeel();
+
+// fetch look and feel
+async function updateLookAndFeel() {
+	try {
+		const response = await fetch(ekApi + "/siteinfo");
+		if (!response.ok)
+			throw new Error();
+		siteInfo = await response.json();
+		document.getElementById("page-title").innerText = siteInfo.title;
+		document.getElementById("tab-title").innerText = siteInfo.title;
+	} catch (error) {
+		console.log('Fetch error: ', error);
+	}
+}
+
 function setLoading(state){
 	if(state == true){
 		document.getElementById("loadingscreen").classList.remove("hidden");

@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "config": {
-    "dbFile": "/var/open-list/db.json"
+    "dbFile": "/var/open-list/db.json",
+    "look": {
+	    "title": "open list"
+    }
   },
   "main": "api",
   "scripts": {

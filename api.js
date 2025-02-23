@@ -19,6 +19,12 @@ app.listen(port, () => {
 	console.log(`Server is running on port ${port}`);
 });
 
+app.get([`${apiRoot}/siteinfo`], (req, res) => {
+	let title = process.env.npm_package_config_look_title || "open-list";
+	let result = {"title": title};
+	res.status(200).json(result);
+});
+
 app.get([`${apiRoot}/records*`, `${apiRoot}/record`], (req, res) => {
 	let subParams = [undefined, undefined];
 	if (req.params[0])
