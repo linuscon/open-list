@@ -178,7 +178,7 @@ function getJSON (url, callback) {
 		xhr.send();
 	}catch(error) {
 		setLoading(false);
-		showError("Eintraege konnten nicht aktualisiert werden! Der Server ist nicht erreichbar");
+		showError("Einträge konnten nicht aktualisiert werden! Der Server ist nicht erreichbar");
 	}
 };
 
@@ -191,7 +191,7 @@ function reloadList(byFunct) {
 	function(err, records) {
 		if (err !== null) {
 			console.log('Something went wrong: ' + err);
-			showError("Eintraege konnten nicht aktualisiert werden! Der Server ist nicht erreichbar");
+			showError("Einträge konnten nicht aktualisiert werden! Der Server ist nicht erreichbar");
 		} else {
 			let dataStr = JSON.stringify(records);
 			if (dataStr == lastData){
