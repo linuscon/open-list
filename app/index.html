@@ -93,6 +93,9 @@
     </div>
     <div class="container">
         <h1 id="page-title">Open-List</h1>
+	<div class="popup" onclick="questPopup()">❔
+          <span class="popuptext" id="questPopup">Press anywere on an item to (un)check it</span>
+        </div>
         <ul id="list">
         </ul>
     </div>
@@ -113,6 +116,11 @@
     </div>
 
     <script>
+	function questPopup() {
+	  var popup = document.getElementById("questPopup");
+	  popup.classList.toggle("show");
+	}
+
         function toggleCheck(item, id) {
             item.classList.toggle("checked");
 	    editEntry(id, "update", "", item.classList.contains("checked"))
