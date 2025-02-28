@@ -134,6 +134,12 @@ button:hover {
     transition: opacity 0.7s, transform 0.7s;
 }
 
+.check-animation {
+    opacity: 0;
+    transform: translateY(200%);
+    transition: opacity 2s, transform 1s;
+}
+
 .hidden {display: none;}
 
 #all-done-div {

@@ -125,13 +125,23 @@
             item.classList.toggle("checked");
 	    editEntry(id, "update", "", item.classList.contains("checked"))
 
-            // Move checked items instantly to the bottom
-            let list = document.getElementById("list");
-            let items = Array.from(list.children);
+            let timeout = 200;
+	console.log(item.nextElementSibling);
+	    if (item.classList.contains("checked") && item.nextElementSibling != null){
+        	item.classList.add("check-animation");
+		timeout = 500;
+	    }
+	    setTimeout(() => {
+           	 // Move checked items instantly to the bottom
+           	 let list = document.getElementById("list");
+           	 let items = Array.from(list.children);
 
-            items.sort((a, b) => a.classList.contains("checked") - b.classList.contains("checked"));
+           	 items.sort((a, b) => a.classList.contains("checked") - b.classList.contains("checked"));
 
-            items.forEach(el => list.appendChild(el)); // Reorder items instantly
+           	 items.forEach(el => list.appendChild(el)); // Reorder items instantly
+                 item.classList.remove("check-animation");
+		 reloadList();
+	    }, timeout);
         }
 
         async function addItem(record) {
