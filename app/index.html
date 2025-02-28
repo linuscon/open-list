@@ -128,6 +128,7 @@
 
         async function addItem(record) {
 	    let text = "";
+		let authors = {"lastChanged": "pending...", "added": "pending..."}
 	    let checked = false;
 	    let id = -1
 	    if (!record){
@@ -143,6 +144,7 @@
 		}
 	    } else {
 		    text = record.entries.title;
+		    authors = record.owners;
 		    checked = record.checked;
 		    id = record.id;
 	    }
@@ -154,15 +156,20 @@
 		if (checked)
             		li.classList.add("checked");
 
-                const span = document.createElement("span");
-                span.textContent = text;
+                const titleSp = document.createElement("span");
+                titleSp.textContent = text;
+
+                const authorsSp = document.createElement("span");
+		authorsSp.textContent = `✍️ ${authors.added}\n🔄 ${authors.lastChanged}`;
+                authorsSp.className = "authors-spn";
 
                 const btn = document.createElement("button");
                 btn.className = "delete-btn";
                 btn.innerHTML = "✖";
                 btn.onclick = function (event) { deleteItem(event, btn, id); };
 
-                li.appendChild(span);
+                li.appendChild(titleSp);
+                li.appendChild(authorsSp);
                 li.appendChild(btn);
                 
                 document.getElementById("list").appendChild(li);

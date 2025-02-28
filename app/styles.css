@@ -54,6 +54,13 @@ ul {
     transform: scale(1.02);
 }
 
+.list-item > span {
+	max-width: calc(75% - 40px);
+	overflow: clip;
+	text-overflow: ellipsis;
+    	text-align: left;
+}
+
 /* Checked Items */
 .checked {
     background: #3bba9c !important;
@@ -145,3 +152,13 @@ button:hover {
 	margin-top: 20px;
 }
 
+.authors-spn {
+	white-space: pre;
+	font-size: 70%;
+	margin-left: auto;
+	max-width: calc(25% - 18px) !important;
+	overflow-x: clip !important;
+	overflow-wrap: revert-layer;
+	text-overflow: ellipsis;
+	text-align: left;
+}
