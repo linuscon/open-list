@@ -1,17 +1,14 @@
 let ekApi = "/api/v1";
 let nextId = 0;
 let lastData = "";
-let listDiv = document.getElementById("list-div");
 let reloadTimer = setInterval(reloadList, 1500);
 let errorTimer = null;
 
 window.addEventListener('DOMContentLoaded', () => {
 	setLoading(true);
-	listDiv = document.getElementById("list-div");
-	reloadList(true);
-	document.getElementById("addTb").addEventListener('keydown', function(event) {
+	document.getElementById("newItem").addEventListener('keydown', function(event) {
 	  if (event.key === 'Enter') {
-		  addEntry();
+		  addItem();
 	  }
 	})
 });
@@ -59,7 +56,6 @@ function checkOnline(){
 }
 
 async function editEntry(id, action, text, state){
-	setLoading(true);
 	try{
 	let response;
 	switch(action) {
@@ -110,71 +106,13 @@ async function editEntry(id, action, text, state){
 		showError("Einträge konnten nicht aktualisiert werden! Der Server ist nicht erreichbar");
 	}
 	setLoading(false);
-	reloadList(true);
-}
-
-function addEntry() {
-	let title = document.getElementById("addTb").value;
-	if (title == ""){
-		alert("Bitte Namen vergeben!");
-		return 1;
-	}
-	editEntry(-1, "add", title, false);
-	reloadList(true);
-	document.getElementById("addTb").value = "";
-}
-
-function rmEntry(id) {
-	editEntry(id, "remove", false);
-	reloadList(true);
-}
-
-function cbChange(htmlId, id){
-	let callingCb = document.getElementById(htmlId);
-	editEntry(id, "update", "", callingCb.checked)
-	reloadList(true);
-}
-
-function addCb(record) {
-	let text = record.entries.title;
-	let checked = record.checked;
-	let id = record.id;
-	let rowDiv = document.createElement('div');
-	rowDiv.setAttribute("class","list-row");
-	rowDiv.htmlFor = "listCb-"+id;
-	let checkbox = document.createElement('input');
-	checkbox.type = "checkbox";
-	checkbox.checked = checked;
-	checkbox.setAttribute("onclick","cbChange('listCb-"+id+"'," + id + ")");
-	checkbox.id = "listCb-"+id;
-
-	let label = document.createElement('label');
-	label.htmlFor = "listCb-"+id;
-	label.appendChild(document.createTextNode(text));
-	if (checked)
-		label.setAttribute("class","strike");
-
-	let miniInfo = document.createElement('lable');
-	miniInfo.htmlFor = "listCb-"+id;
-	miniInfo.setAttribute("class","miniInfo");
-	miniInfo.appendChild(document.createTextNode(`von: ${record.owners.added}\nzul. geändert: ${record.owners.lastChanged}`));
-
-	let rmBtn = document.createElement('button');
-	rmBtn.htmlFor = "listCb-"+id;
-	rmBtn.appendChild(document.createTextNode('\u{1F5D1}'));
-	rmBtn.setAttribute("onclick","rmEntry(" + id + ")");
-
-	rowDiv.appendChild(checkbox);
-	rowDiv.appendChild(label);
-	rowDiv.appendChild(rmBtn);
-	rowDiv.appendChild(miniInfo);
-	rowDiv.appendChild(document.createElement('br'));
-	listDiv.appendChild(rowDiv);
+	//reloadList(true);
 }
 
 function clearCbs(){
-	while(listDiv.firstChild) {
-		listDiv.removeChild(listDiv.firstChild);
+	let list = document.getElementById("list");
+	while(list.firstElementChild) {
+		list.removeChild(list.firstElementChild);
 	}
 }
 
@@ -218,7 +156,8 @@ function reloadList(byFunct) {
 			records.sort(function(a,b){return a.checked-b.checked});
 			clearCbs();
 			for(let i = 0; i < records.length; i++){
-				addCb(records[i]);
+				console.log(records[i]);
+				addItem(records[i]);
 			}
 			if (records.length == 0) {
 				document.getElementById("all-done-div").classList.remove("hidden");

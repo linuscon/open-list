@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<link rel='stylesheet' type='text/css' href='style/main.css'>
-	<link rel="icon" href="/favicon.ico">
-	<script type="text/javascript" src="/js/main.js"></script>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-	<meta name='robots' content='noindex,follow' />
-	<meta http-equiv="content-type" content="text/html; charset=utf-8">
-	<title id="tab-title">open list</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="tab-title">open list</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript" src="/js/main.js"></script>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
 </head>
 <style>
 #loadingscreen {
@@ -17,7 +16,7 @@
         width: 100%;
         background: white;
         z-index: 9;
-	scale: 5;
+        scale: 5;
 }
 
 #loadingscreen img {
@@ -68,37 +67,116 @@
       transform: scale(0);
     } 100% {
       -webkit-transform: scale(1.0);
+      opacity: 0;
+
+    }
+}
+
+@keyframes sk-scaleout {
+    0% {
+      -webkit-transform: scale(0);
+      transform: scale(0);
+    } 100% {
+      -webkit-transform: scale(1.0);
       transform: scale(1.0);
       opacity: 0;
     }
 }
 </style>
+
+
 <body>
-<div id="errorBox" class="alert hidden">
-  <span class="closebtn" onclick="this.parentElement.classList.add('hidden');">&times;</span> 
-  <strong>Error: </strong><div id="errorText"></div>
-</div>
-<h1 id="page-title">Open-List</h1>
-<div id="container">
+    <div id="errorBox" class="alert hidden">
+       <span class="closebtn" onclick="this.parentElement.classList.add('hidden');">&times;</span> 
+       <strong>Error: </strong><div id="errorText"></div>
+    </div>
+    <div class="container">
+        <h1 id="page-title">Open-List</h1>
+        <ul id="list">
+        </ul>
+    </div>
+    <div id="loadingscreen"><div class="spinner"></div></div>
+    <div id="all-done-div" class="hidden" action="">
+        <svg width="100"800p height="100px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <g>
+                <path fill="none" d="M0 0h24v24H0z"/>
+                <path fill=#3bba9c d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-.997-4L6.76 11.757l1.414-1.414 2.829 2.829 5.656-5.657 1.415 1.414L11.003 16z"/>
+            </g>
+        </svg>
+        <p>Alles erledigt! :)</p>
+    </div>
 
-<div id="loadingscreen"><div class="spinner"></div></div>
+    <div class="input-container">
+        <input type="text" id="newItem" placeholder="Neuer Eintrag...">
+        <button onclick="addItem()">Add</button>
+    </div>
 
-<div id="all-done-div" class="hidden" action="">
-	<svg width="100"800p height="100px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-	    <g>
-	        <path fill="none" d="M0 0h24v24H0z"/>
-	        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-.997-4L6.76 11.757l1.414-1.414 2.829 2.829 5.656-5.657 1.415 1.414L11.003 16z"/>
-	    </g>
-	</svg>
-	<p>Alles erledigt! :)</p>
-</div>
-<div id="list-div" action=""></div>
+    <script>
+        function toggleCheck(item, id) {
+            item.classList.toggle("checked");
+	    editEntry(id, "update", "", item.classList.contains("checked"))
 
-<div class="input-and-button">
-	<input type="text" id="addTb" placeholder="neues Element">
-	<button id="addBtn" onclick="addEntry()" class="addBtn">+</button>
-</div>
-</div>
+            // Move checked items instantly to the bottom
+            let list = document.getElementById("list");
+            let items = Array.from(list.children);
+
+            items.sort((a, b) => a.classList.contains("checked") - b.classList.contains("checked"));
+
+            items.forEach(el => list.appendChild(el)); // Reorder items instantly
+        }
+
+        function addItem(record) {
+	    let text = "";
+	    let checked = false;
+	    let id = -1
+	    if (!record){
+            	var input = document.getElementById("newItem");
+            	text = input.value.trim();
+		if (text != "") {
+	        	editEntry(-1, "add", text, false);
+			reloadList()
+		} else {
+			showError("Bitte gib' dem Eintrag einen Titel");
+			return;
+		}
+	    } else {
+		    text = record.entries.title;
+		    checked = record.checked;
+		    id = record.id;
+	    }
+
+            if (text != null) {
+                const li = document.createElement("li");
+                li.className = "list-item";
+                li.onclick = function () { toggleCheck(this, id); };
+		if (checked)
+            		li.classList.add("checked");
+
+                const span = document.createElement("span");
+                span.textContent = text;
+
+                const btn = document.createElement("button");
+                btn.className = "delete-btn";
+                btn.innerHTML = "✖";
+                btn.onclick = function (event) { deleteItem(event, btn, id); };
+
+                li.appendChild(span);
+                li.appendChild(btn);
+                
+                document.getElementById("list").appendChild(li);
+	        if (!record)
+                	input.value = ""; // Clear input field
+            }
+        }
+
+        function deleteItem(event, button, id) {
+            event.stopPropagation(); // Prevent triggering toggleCheck()
+	    editEntry(id, "remove", false);
+            const item = button.parentElement;
+            item.classList.add("delete-animation");
+            setTimeout(() => item.remove(), 300);
+        }
+	reloadList(true);
+    </script>
 </body>
 </html>
-
