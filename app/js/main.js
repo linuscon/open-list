@@ -38,8 +38,10 @@ function setLoading(state){
 }
 
 function showError(text){
-	if (errorTimer)
+	if (errorTimer){
 		clearInterval(errorTimer);
+		lastData = "";
+	}
 	let errorBox = document.getElementById("errorBox");
 	document.getElementById("errorText").innerHTML = text;
 	errorBox.classList.remove("hidden");
@@ -101,12 +103,13 @@ async function editEntry(id, action, text, state){
 	}
 	if (!response.ok){
 		showError("Einträge konnten nicht aktualisiert werden! Der Server ist nicht erreichbar");
+		return null;
 	}
+	return response;
+
 	} catch(error) {
 		showError("Einträge konnten nicht aktualisiert werden! Der Server ist nicht erreichbar");
 	}
-	setLoading(false);
-	//reloadList(true);
 }
 
 function clearCbs(){
@@ -142,7 +145,7 @@ function reloadList(byFunct) {
 	if(byFunct)
 		setLoading(true);
 	getJSON(ekApi + "/records",
-	function(err, records) {
+	async function(err, records) {
 		if (err !== null) {
 			console.log('Something went wrong: ' + err);
 			showError("Einträge konnten nicht aktualisiert werden! Der Server ist nicht erreichbar");
@@ -156,8 +159,7 @@ function reloadList(byFunct) {
 			records.sort(function(a,b){return a.checked-b.checked});
 			clearCbs();
 			for(let i = 0; i < records.length; i++){
-				console.log(records[i]);
-				addItem(records[i]);
+				await addItem(records[i]);
 			}
 			if (records.length == 0) {
 				document.getElementById("all-done-div").classList.remove("hidden");

@@ -14,8 +14,9 @@
         top: 0;
         bottom: 0;
         width: 100%;
-        background: white;
-        z-index: 9;
+    	background-color: #0a0f1f;
+    	background: #0a0f1f;
+        z-index: 99;
         scale: 5;
 }
 
@@ -86,7 +87,7 @@
 
 
 <body>
-    <div id="errorBox" class="alert hidden">
+    <div id="errorBox" class="alert hidden" onclick="this.classList.add('hidden');">
        <span class="closebtn" onclick="this.parentElement.classList.add('hidden');">&times;</span> 
        <strong>Error: </strong><div id="errorText"></div>
     </div>
@@ -125,7 +126,7 @@
             items.forEach(el => list.appendChild(el)); // Reorder items instantly
         }
 
-        function addItem(record) {
+        async function addItem(record) {
 	    let text = "";
 	    let checked = false;
 	    let id = -1
@@ -133,8 +134,9 @@
             	var input = document.getElementById("newItem");
             	text = input.value.trim();
 		if (text != "") {
-	        	editEntry(-1, "add", text, false);
-			reloadList()
+			setLoading(true)
+			await editEntry(-1, "add", text, false);
+			reloadList(true);
 		} else {
 			showError("Bitte gib' dem Eintrag einen Titel");
 			return;
@@ -176,7 +178,7 @@
             item.classList.add("delete-animation");
             setTimeout(() => item.remove(), 300);
         }
-	reloadList(true);
+	reloadList();
     </script>
 </body>
 </html>
