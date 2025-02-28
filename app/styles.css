@@ -128,7 +128,7 @@ button:hover {
 /* Delete Animation */
 .delete-animation {
     opacity: 0;
-    transform: translateX(500px);
+    transform: translateX(+80%);
     transition: opacity 0.7s, transform 0.7s;
 }
 
