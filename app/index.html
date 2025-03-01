@@ -95,7 +95,7 @@
     <div class="container">
         <h1 id="page-title">Open-List</h1>
 	<div class="popup" onclick="questPopup()">❔
-          <span class="popuptext" id="questPopup">Press anywere on an item to (un)check it</span>
+          <span class="popuptext" id="questPopup">Press anywere on an item to (un)check it, press on the notebook to edit the note</span>
         </div>
         <ul id="list">
         </ul>
@@ -120,6 +120,12 @@
 	function questPopup() {
 	  var popup = document.getElementById("questPopup");
 	  popup.classList.toggle("show");
+	  if (popup.classList.contains("show")){
+	  	setTimeout(() => {
+	  		document.getElementById("questPopup");
+	  		popup.classList.toggle("show");
+	  	}, 7000);
+	  }
 	}
 
         function toggleCheck(item, id) {
@@ -206,7 +212,7 @@
             }
         }
 
-        function updateNote(event, notesSp, id) {
+        async function updateNote(event, notesSp, id) {
             event.stopPropagation(); // Prevent triggering toggleCheck()
  	    let oldNote = notesSp.innerHTML.slice(4);
 	    let promtText = "Notiz aktualisieren";		
@@ -215,7 +221,7 @@
 	    let newNote = window.prompt(promtText, oldNote);
 	    if (newNote != null && newNote != oldNote){
 	    	editEntry(id, "update-note", newNote, false);
-		reloadList(true);
+		await reloadList(true);
 	    }
 	}
 

@@ -191,7 +191,7 @@ button:hover {
 /* The actual popup */
 .popup .popuptext {
 	visibility: hidden;
-	width: 160px;
+	width: 80%;
 	background-color: #555;
 	color: #fff;
 	text-align: center;
@@ -199,9 +199,9 @@ button:hover {
 	padding: 8px 0;
 	position: fixed;
 	z-index: 20;
-	top: -5px;
-	right: 26px;
-	margin-left: -80px;
+	top: 2px;
+	right: 32px;
+	margin-left: -85px;
 }
 
 /* Popup arrow */
