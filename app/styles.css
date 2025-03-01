@@ -61,6 +61,11 @@ ul {
 	overflow: clip;
 	text-overflow: ellipsis;
     	text-align: left;
+	white-space: pre;
+}
+
+.notes-spn {
+	font-size: small;
 }
 
 /* Checked Items */

@@ -99,6 +99,19 @@ async function editEntry(id, action, text, state){
 			});
 
 		break;
+		case "update-note":
+			response = await fetch(ekApi + "/record", {
+				method: "post",
+				body: JSON.stringify({
+					"id": id,
+					"entries": {"note": text},
+				}),
+				headers: {
+					"Content-type": "application/json; charset=UTF-8",
+				}
+			});
+
+		break;
 
 	}
 	if (!response.ok){

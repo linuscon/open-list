@@ -127,7 +127,6 @@
 	    editEntry(id, "update", "", item.classList.contains("checked"))
 
             let timeout = 200;
-	console.log(item.nextElementSibling);
 	    if (item.classList.contains("checked") && item.nextElementSibling != null){
         	item.classList.add("check-animation");
 		timeout = 500;
@@ -147,7 +146,8 @@
 
         async function addItem(record) {
 	    let text = "";
-		let authors = {"lastChanged": "pending...", "added": "pending..."}
+	    let notes = "";
+	    let authors = {"lastChanged": "pending...", "added": "pending..."}
 	    let checked = false;
 	    let id = -1
 	    if (!record){
@@ -163,6 +163,7 @@
 		}
 	    } else {
 		    text = record.entries.title;
+		    notes = record.entries.note;
 		    authors = record.owners;
 		    checked = record.checked;
 		    id = record.id;
@@ -177,6 +178,14 @@
 
                 const titleSp = document.createElement("span");
                 titleSp.textContent = text;
+
+                const notesSp = document.createElement("span");
+		if (!notes)
+		    notes = "";
+                notesSp.textContent = "\n📝 "+notes;
+                notesSp.className = "notes-spn";
+                notesSp.onclick = function (event) { updateNote(event, notesSp, id); };
+                titleSp.appendChild(notesSp);
 
                 const authorsSp = document.createElement("span");
 		authorsSp.textContent = `✍️ ${authors.added}\n🔄 ${authors.lastChanged}`;
@@ -196,6 +205,19 @@
                 	input.value = ""; // Clear input field
             }
         }
+
+        function updateNote(event, notesSp, id) {
+            event.stopPropagation(); // Prevent triggering toggleCheck()
+ 	    let oldNote = notesSp.innerHTML.slice(4);
+	    let promtText = "Notiz aktualisieren";		
+	    if (oldNote == "")
+		promtText = "Neue Notiz";
+	    let newNote = window.prompt(promtText, oldNote);
+	    if (newNote != null && newNote != oldNote){
+	    	editEntry(id, "update-note", newNote, false);
+		reloadList(true);
+	    }
+	}
 
         function deleteItem(event, button, id) {
             event.stopPropagation(); // Prevent triggering toggleCheck()
