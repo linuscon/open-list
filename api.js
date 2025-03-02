@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const DbStumb = require('./lib/DbStumb.js');
+const Decorator = require('./lib/Decorator.js');
 const cors = require('cors')
 const app = express();
 
@@ -11,6 +12,7 @@ const apiRoot = '/api/v1';
 
 // setting db stump
 const db = new DbStumb();
+const deco = new Decorator();
 
 app.use(bodyParser.json());
 
@@ -23,6 +25,17 @@ app.get([`${apiRoot}/siteinfo`], (req, res) => {
 	let title = process.env.npm_package_config_look_title || "open-list";
 	let result = {"title": title};
 	res.status(200).json(result);
+});
+
+app.get([`${apiRoot}/decorations/record/*`], (req, res) => {
+	recordID = req.params[0];
+	if (!recordID)
+		res.status(400).json();
+
+	let record = db.getRecords().filter(d => d.id == recordID)[0];
+	
+	let decorations = deco.getDecorations(record)
+	res.status(200).json(decorations);
 });
 
 app.get([`${apiRoot}/records*`, `${apiRoot}/record`], (req, res) => {
