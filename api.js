@@ -39,7 +39,7 @@ app.get([`${apiRoot}/decorations/record/*`], (req, res) => {
 });
 
 app.get([`${apiRoot}/records*`, `${apiRoot}/record`], (req, res) => {
-	let subParams = [undefined, undefined];
+	let subParams = [undefined, undefined, undefined];
 	if (req.params[0])
 		subParams = req.params[0].split('/');
 
@@ -62,8 +62,16 @@ app.get([`${apiRoot}/records*`, `${apiRoot}/record`], (req, res) => {
 		case "checked":
 			var reqState = subParams[2];
 			var dbRes = db.getRecords();
-			console.log(dbRes);
 			res.status(200).json(dbRes.filter(d => d.checked != (reqState == 'false') && !d.deleted));
+			return;
+			break;
+		case "with-decoration":
+			var dbRes = db.getRecords();
+			let records = dbRes.filter(d => !d.deleted);
+			records.forEach((record) => {
+				record.decoration = deco.getDecorations(record);
+			});
+			res.status(200).json(records);
 			return;
 			break;
 		default:

@@ -156,6 +156,12 @@
 	    let authors = {"lastChanged": "pending...", "added": "pending..."}
 	    let checked = false;
 	    let id = -1
+	    let emoji = "";
+	    if (record && record.decoration != undefined){
+		    if (record.decoration.emoji != "")
+		    	emoji = record.decoration.emoji;
+	    }
+	    emoji = unicodeToChar(emoji);
 	    if (!record){
             	var input = document.getElementById("newItem");
             	text = input.value.trim();
@@ -183,7 +189,11 @@
             		li.classList.add("checked");
 
                 const titleSp = document.createElement("span");
-                titleSp.textContent = text;
+		let preTitle = "";
+		if (emoji != "")
+			preTitle = emoji + " ";
+
+                titleSp.textContent = preTitle + text;
 
                 const notesSp = document.createElement("span");
 		if (!notes)

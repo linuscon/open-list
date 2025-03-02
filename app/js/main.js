@@ -157,7 +157,7 @@ function reloadList(byFunct) {
 		return
 	if(byFunct)
 		setLoading(true);
-	getJSON(ekApi + "/records",
+	getJSON(ekApi + "/records/with-decoration",
 	async function(err, records) {
 		if (err !== null) {
 			console.log('Something went wrong: ' + err);
@@ -182,4 +182,14 @@ function reloadList(byFunct) {
 				
 			setLoading(false);
 		}});
+}
+
+function unicodeToChar(text) {
+	try{
+		if (text == undefined || text == "")
+			return "";
+		return String.fromCodePoint(parseInt (text.replace(/&#/, ''), 16));
+	} catch {
+		return "";
+	}
 }
