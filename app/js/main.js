@@ -163,7 +163,8 @@ function reloadList(byFunct) {
 			console.log('Something went wrong: ' + err);
 			showError("Einträge konnten nicht aktualisiert werden! Der Server ist nicht erreichbar");
 		} else {
-			let dataStr = JSON.stringify(records);
+			// do not include decoration in diff, cause decoration has random elements
+			let dataStr = JSON.stringify(records.map(({ decoration, ...rest }) => rest));
 			if (dataStr == lastData){
 				setLoading(false);
 				return;
